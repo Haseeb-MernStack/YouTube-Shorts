@@ -10,9 +10,9 @@ const navbar = () => {
     return (
         <div className='h-14 flex items-center justify-between'>
             {/* logo text */}
-            <div>
+            <Link href={'/'}>
                 <h1 className='text-xl font-bold'>YT<span className='text-red-500'>Shorts</span></h1>
-            </div>
+            </Link>
             {/* Search input field */}
             <div className='w-1/2'>
                 <Input
@@ -23,7 +23,7 @@ const navbar = () => {
             {/* Account management */}
             <div className='flex items-center space-x-2'>
                 <Link href={'/upload'}>
-                <Button><Plus /> Create</Button>
+                    <Button><Plus /> Create</Button>
                 </Link>
                 <header className="flex justify-end items-center p-4 gap-4 h-16">
                     <SignedOut>
