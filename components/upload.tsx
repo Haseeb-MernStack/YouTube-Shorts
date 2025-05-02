@@ -1,6 +1,7 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { ImageKitProvider, IKImage, IKUpload } from "imagekitio-next";
+
+import React, { useState } from "react";
+import { ImageKitProvider, IKUpload } from "imagekitio-next";
 import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
 import { Progress } from "./ui/progress";
 
@@ -30,7 +31,7 @@ const authenticator = async () => {
 };
 
 type UploadProps = {
-    setVideoUrl: (url: string) => void;
+    setVideoUrl?: (url: string) => void;
 };
 
 export default function Upload({ setVideoUrl }: UploadProps) {
@@ -40,20 +41,23 @@ export default function Upload({ setVideoUrl }: UploadProps) {
     const onError = (err: any) => {
         console.log("Error", err);
         setError(err.message);
-
         setUploadProgress(null);
     };
 
     const onSuccess = (res: IKUploadResponse) => {
         console.log("Success", res);
-        setVideoUrl(res.url);
+        if (typeof setVideoUrl === "function") {
+            setVideoUrl(res.url);
+        } else {
+            console.warn("setVideoUrl is not a function. Skipping set.");
+        }
         setUploadProgress(100);
         setError(null);
     };
 
     const onUploadProgress = (evt: ProgressEvent<XMLHttpRequestEventTarget>) => {
         if (evt.lengthComputable) {
-            const progress = Math.round(evt.loaded / evt.total / 100);
+            const progress = Math.round((evt.loaded / evt.total) * 100);
             setUploadProgress(progress);
         }
     };
@@ -65,20 +69,20 @@ export default function Upload({ setVideoUrl }: UploadProps) {
 
     return (
         <ImageKitProvider
-            publicKey={publicKey}
-            urlEndpoint={urlEndpoint}
+            publicKey={publicKey || ""}
+            urlEndpoint={urlEndpoint || ""}
             authenticator={authenticator}
         >
             <p>Upload File</p>
             <IKUpload
                 useUniqueFileName={true}
                 validateFile={(file) => file.size < 20 * 1024 * 1024}
-                folder={"/sample-folder"}
+                folder="/sample-folder"
                 onError={onError}
                 onSuccess={onSuccess}
                 onUploadProgress={onUploadProgress}
                 onUploadStart={onUploadStart}
-                className="mt-1 block w-full text-sm tex-gray-900 file:mr-4 file:px-4 file:py-2 file:rounded-md"
+                className="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:px-4 file:py-2 file:rounded-md"
             />
 
             {/* Show progress bar only when upload is in progress  */}

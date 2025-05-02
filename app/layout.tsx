@@ -1,23 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/header/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Youtube Shorts - Web App",
-  description: "Created YouTube Shorts Web App where you can create shorts and also see the videos.",
+  title: "YouTube Shorts - Web App",
+  description: "Create, share, and watch YouTube Shorts on our platform.",
 };
 
 export default function RootLayout({
@@ -28,9 +17,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+        <body className={`antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

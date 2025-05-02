@@ -3,9 +3,11 @@ import { uploadShortsAction } from '@/actions/upload-short'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Upload from '@/components/upload'
+import { Loader2 } from 'lucide-react'
 import React, { useActionState, useState } from 'react'
 
-const page = () => {
+const Page = () => {
     const [formState, action, isPending] = useActionState(uploadShortsAction, { errors: {} });
 
     const [videoUrl, setVideoUrl] = useState<string>("");
@@ -25,7 +27,7 @@ const page = () => {
                         type='text'
                         name='title'
                         placeholder='Title'
-                        className=''
+                        className='mt-2'
                     />
                     {
                         formState.errors.title && <span className='text-red-500 text-sm'>{formState.errors.title}</span>
@@ -37,23 +39,19 @@ const page = () => {
                         type='text'
                         name='description'
                         placeholder='Description'
-                        className=''
+                        className='mt-2'
                     />
                     {
                         formState.errors.description && <span className='text-red-500 text-sm'>{formState.errors.description}</span>
                     }
                 </div>
                 <div className='mb-4'>
-                    <Label>Upload file</Label>
-                    <Input
-                        type='file'
-                        className=''
-                    />
+                    <Upload setVideoUrl={setVideoUrl} />
                 </div>
-                <Button type='submit'>Upload</Button>
+                <Button type='submit'>{isPending ? <Loader2 className=' animate-spin h-4 w-4' /> : "Upload"}</Button>
             </form>
         </div>
     )
 }
 
-export default page
+export default Page
